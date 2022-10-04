@@ -70,7 +70,6 @@
 </details>
 <br/>
 <!-- 문제 4 -->
-<!-- 문제3 -->
 <details>
   <summary>
     4. null과 undefined 그리고 undeclared에 대해 설명하시오.
@@ -84,6 +83,103 @@
     <br/>
     <br/>
     ◎ undeclared는 접근 가능한 스코프에 변수 선언이 되지 않은 상태를 의미합니다. undeclared 상태의 변수를 참조 하게 되면 Uncaught ReferenceError 에러가 해당 함수가 정의 되지 않은 상태라는 메세지를 출력하게 됩니다.
+  </div>
+</details>
+<br/>
+<!-- 문제 5 -->
+<details>
+  <summary>
+    5. 다음 코드가 즉시 호출 함수 표현식(IIFE)로 동작하지 않는 이유에 관해서 설명해보세요: function foo(){ }();.
+  </summary>
+  <br/>
+  <div>
+    즉시 실행 함수의 기본 형태는 그룹 연산자 (...)로 함수를 감싸고 있어야 하며, 함수의 코드 블럭 뒤에너느 함수 호출 연산자()가 있어야 한다. 하지만 위의 코드에서는 그룹 연산자로 감싸지 않았기 때문에 즉시 실행 함수로 동작하지 않는다. 더 구체적으로 이야기하자면 JS 엔진은 호출 연산자 ()를 함수와 분리된 그룹 연산자로 인식하기 때문에 function foo(){}; ()로 이해 하는 것이다. 이렇게 피연산자가 없는 그룹 연산자는 문법 에러를 발생시킨다. 만약 주어진 코드를 즉시 실행 함수로 동작하게 하고 싶다면, 아래와 같이 작성해야 한다. <br/>
+    <code>(function foo(){ }())</code>
+  </div>
+</details>
+<br/>
+<!-- 문제 6 -->
+<details>
+  <summary>
+    6. 익명함수(anonymous functions)는 주로 어떤 상황에서 사용하나요?
+  </summary>
+  <br/>
+  <div>
+    일반적으로 함수는 재사용을 위해 일단 선언 해두고 필요할 때마다 호출해서 쓰기 때문에 호출에 대비해 항상 메모리 공간의 일부를 차지합니다. 그런데 만약 어떤 함수가 한번만 사용된다면, 메모리 관리 측면에서 더 이상 필요없는 함수가 메모리 공간을 차지하는 것은 비효율적입니다. 이러한 경우에 사용하는 것이 바로 "익명 함수"인데요. 익명 함수는 자신이 호출 될때만 일시적으로 메모리 공간에 존재하다가 함수의 생명 주기가 끝나면 가비지 컬렉터에 의해 삭제되기 때문에 메모리 관리 측면에서 효율적입니다. 이러한 특징 때문에 익명 함수는 주로 state가 의도치 않게 변경되는 것을 방지하는 '클로져'나 '콜백 함수'로 사용 됩니다.
+  </div>
+</details>
+<br/>
+<!-- 문제 7 -->
+<details>
+  <summary>
+    7. 클로져(Closure)는 무엇이며 왜 사용하나요?
+  </summary>
+  <br/>
+  <div>
+    외부 함수보다 중첩 함수의 생명 주기가 더 긴 경우에 중첩 함수가 이미 생명 주기가 종료된 외부 함수의 변수를 참조할 때가 있는데, 이때 이 중첩 함수를 클로져라고 부른다. 예를 들어 전역에 선언된 inside라는 함수가 콘솔 창에 변수 x의 값을 출력하고, 전역에 선언된 outside 라는 함수가 변수 x의 값을 갖고 있고 inside 함수를 호출 한다고 가정해보자. 코드로 나타내면 아래와 같다.</br>
+    <code>
+      function outside(){</br>
+      &nbsp const x = 10;</br>
+      &nbsp inside()</br>
+      }</br>
+      function inside(){</br>
+      &nbsp console.log(x)</br>
+      }</br>
+      outside()
+    </code>
+    <br/>
+    이때 inside 함수가 클로져가 되는 것이다. 그 이유는 outside 함수가 호출 되면서 실행 컨텍스트에 push 되어 함수 코드 블럭의 코드를 하나씩 실행 하다가 마지막으로 inside 함수를 호출하면서 종료되기 때문에 실행 컨텍스트에서 pop 된다. 이는 outside 함수의 생명 주기가 종료 되었음을 의미하며, outside 함수의 생명 주기가 종료된 시점에 inside 함수가 실행 중이라면 inside 함수는 outside 함수보다 생명 주기도 길면서 상위 스코프에서 x 값을 참조하기 때문에 클로져가 되는 것이다.
+    <br/>
+    이러한 클로져는 주로 상태(state)가 의도하지 않은 방향으로 변경되는 것을 방지하기 위해 은닉하거나 특정 함수에게만 상태 변경을 허용하기 위해 사용된다.  
+  </div>
+</details>
+<br/>
+<!-- 문제 8 -->
+<details>
+  <summary>
+    8. 아래 3개의 코드들의 차이점을 설명하시오.
+    <br/><br/>
+    <code>
+      fucntion Person(){}; <br/>
+      var person = Person(); <br/>
+      var person = new Person(); <br/>
+    </code>
+  </summary>
+  <br/>
+  <div>
+    먼저 <code>function Person(){};</code>은 일반 함수 선언문으로 실행을 하기 위해서는 호출을 해야만 한다. 반면 <code>var person = Person();</code>은 선언된 Person 함수를 호출하고, Person 함수가 반환하는 값을 person 변수에 할당한다. 그리고 <code>var person = new Person();</code>는 Person 생성자 함수가 만든 인스턴스를 person 변수에 할당한다. 참고로 Person 생성자 함수가 생성한 인스턴스는 Person 객체의 인스턴스를 상속 받는다. 
+  </div>
+</details>
+<br/>
+<!-- 문제 9 -->
+<details>
+  <summary>
+    9. call과 apply 메서드의 차이는 무엇인가.
+  </summary>
+  <br/>
+  <div>
+    call과 apply 메서드가 공통적으로 하는 역할은 크게 2개이다. 첫번째는 첫번째 인수로 전달 받은 값을 함수의 this에 바인딩 하는 것이고, 두번째는 두번째 인수로 전달받은 데이터를 함수의 인수로 전달하면서 함수를 호출 하는 것이다. 함수 내부의 this에 특정 값을 명시적으로 바인딩 하면서 함수를 호출하며 동작 방식이 똑같지만 함수 호출 시 해당 함수에 인수를 전달하는 방식이 다르다. call 메서드는 함수 호출 시 전달할 인수들을 구분할 때 쉼표를 사용하지만, apply 메서드는 인수들을 하나의 배열로 묶어서 전달한다. <br><br>
+    - 코드 예시<br>
+    <code>
+    function foo(a ,b, c){ <br>
+    &nbsp console.log(‘’,arguments) <br>
+    &nbsp return a+b+c; <br>
+    } <br>
+    let this = {a : 1} <br>
+    foo.apply(this, [1, 2, 3]); <br>
+    Foo.call(this, 1, 2, 3); 
+    </code>
+  </div>
+</details>
+<br/>
+<!-- 문제 10 -->
+<details>
+  <summary>
+    10. bind 메서드에 대해 설명하시오.
+  </summary>
+  <br/>
+  <div>
+    bind 메서드도 call, apply 메서드와 this 바인딩을 위해서 사용되지만, 두 메서드와 달리 함수를 호출하지 않고 그저 인수로 받은 값을 해당 객체의 this에 바인딩한다. 이러한 bind 메서드는 주로 메서드의 this와 메서드 내부의 중첩 함수 또는 콜백 함수의 this가 일치하지 않는 경우 통일 하기 위해 사용된다.
   </div>
 </details>
 <br/>
